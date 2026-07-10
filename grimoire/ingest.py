@@ -1,4 +1,7 @@
 
+from grimoire import retriever
+
+
 def chunk_text(text: str, source: str, chunk_size: int, overlap: int) -> list[dict]:
     if overlap >= chunk_size: raise ValueError("overlap must be smaller than chunk_size")
     
@@ -19,12 +22,20 @@ def chunk_text(text: str, source: str, chunk_size: int, overlap: int) -> list[di
 if __name__ == "__main__":
     from pathlib import Path
     
+    # load the data from a specific path
     def load(path) -> str:
         return Path(path).read_text()
      
     chunks = []
     
+    # loop over the markdown files in the data folder and chunk them
     for path in Path("data").glob("*.md"):
         chunks += chunk_text(load(path), path.name, 500, 50)
-        
-    print(len(chunks))
+    
+    # embed the chunks
+    embeddings = retriever.embed_chunks(chunks)
+    
+    # embed the query (will come from input later on.)
+    retriever.retrieve("What is grappling", chunks, embeddings, 3)
+    
+    
