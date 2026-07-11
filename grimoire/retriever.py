@@ -22,7 +22,9 @@ def retrieve(query: str, chunks: list[dict], embeddings: np.ndarray, k: int):
     # get top-k scores
     top_indices = np.argsort(-scores)[:k]
     
+    response = []
+    
     for idx in top_indices:
-        print(f"Chunk #: {idx}")
-        print("---------------")
-        print(chunks[idx]["text"])
+        response.append(chunks[idx])
+        
+    return response

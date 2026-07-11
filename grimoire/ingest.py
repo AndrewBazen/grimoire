@@ -1,5 +1,5 @@
 
-from grimoire import retriever
+from grimoire import retriever, generator
 
 
 def chunk_text(text: str, source: str, chunk_size: int, overlap: int) -> list[dict]:
@@ -35,7 +35,14 @@ if __name__ == "__main__":
     # embed the chunks
     embeddings = retriever.embed_chunks(chunks)
     
+    query = "What is grappling"
+    
     # embed the query (will come from input later on.)
-    retriever.retrieve("What is grappling", chunks, embeddings, 3)
+    retrieved_chunks = retriever.retrieve(query, chunks, embeddings, 3)
+    
+    
+    response = generator.generate(query, retrieved_chunks)
+    
+    print(response)
     
     
